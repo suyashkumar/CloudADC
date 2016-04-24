@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="adcApp">
+ <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+                <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <!-- Optional theme -->
+<!---       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.2/nv.d3.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.5/angular-material.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>     
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+       	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script> 
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.5/angular-material.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.2/nv.d3.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>	
+		
+		<script type="text/javascript" src="https://cdn.rawgit.com/eligrey/FileSaver.js/62d219a0fac54b94cd4f230e7bfc55aa3f8dcfa4/FileSaver.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+		
+		
+        <script src="js/controllers.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+        <style>
+         
+            .btn.act, .btn:act {background-color:blue;}
+        </style>
+    </head>
+
+
+	<body id="home" ng-controller="ADCCtrl" style="background-color:#FAFAFA;">
+		<div id="control">
+<md-content>	
+ <md-toolbar >
+      <h2 class="md-toolbar-tools">
+        <span>CloudADC</span>
+      </h2>
+    </md-toolbar>
+</md-content>
+		</div>
+	
+	<div class="container">
+	<br>
+	<br>
+	<div class="well text-center">
+		<h2> Welcome to CloudADC</h2>
+	</div>
+	<div class="row text-center">
+		Num samples:
+	</div>
+	<div class = "row">
+		<div class="col-lg-2 col-lg-offset-4 text-center"> 
+      		<md-slider flex min="0" max="16000"  ng-model="numSamples" aria-label="red" id="blue-slider" ng-mouseup="updateSamples(data)">
+      		</md-slider> 
+		</div>
+		<div class="col-lg-2 text-center" style="margin-top:-15px">
+		<md-input-container>
+        	<input flex type="number"  ng-model="numSamples" aria-label="red" aria-controls="red-slider">
+      		</md-input-container>
+
+
+		</div>
+	</div>
+	<div class="row text-center">
+		
+			  <md-button ng-click="acquire()">Acquire</md-button> 
+	
+	</div>
+	
+	<div class="row">
+	<div class="col-lg-8 col-lg-offset-2 ng-hide" ng-hide = "plotHide">
+		<md-card>
+		<md-card-title>
+		  <md-card-title-text>
+            <span class="md-headline">{{plotTitle}}</span>
+          </md-card-title-text>
+        </md-card-title>
+		<md-card-content>
+ 					<div id="graph" class="text-center" style="height:300px;">
+						<div class="text-center" style="width:100%;height:500px" id="g2"><svg id = "g3"></svg></div>
+					</div> 
+		</md-card-content> 
+		 <md-card-actions layout="row" layout-align="end center">
+          <md-button class="md-icon-button" aria-label="Favorite" ng-click="saveSVG()">
+        	<i class="fa fa-floppy-o" aria-hidden="true"></i> 
+			<md-tooltip >
+           		Quick Save Graph 
+          </md-tooltip>
+          </md-button>
+          </md-card-actions>
+		</md-card>	
+		</div>
+		</div> 
+
+	<div class="row">
+			<div class="col-lg-8 col-lg-offset-2 text-center ng-hide" ng-hide="plotHide" >
+			  <md-button ng-click="saveCSV(data)">Download CSV</md-button> 
+			</div>
+	</div>
+	<br>
+	<br>
+
+	<div class="row">
+		<div class = "col-md-12 text-center">
+				By <a href="http://suyashkumar.com" target=_blank>Suyash Kumar</a> 
+		</div>
+	
+	</div> 
+
+
+	</body>
+</html>
+
