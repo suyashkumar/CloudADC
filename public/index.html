@@ -53,34 +53,31 @@
 	<div class="well text-center">
 		<h2> Welcome to CloudADC</h2>
 	</div>
+	<div class="row text-center" style="margin-top:0px"> 
+			  <md-button ng-click="acquire()">Acquire</md-button> 
+	</div>
+	
 	<div class="row text-center">
 		Num samples:
 	</div>
 	<div class = "row">
 		<div class="col-lg-2 col-lg-offset-4 text-center"> 
-      		<md-slider flex min="0" max="16000"  ng-model="numSamples" aria-label="red" id="blue-slider" ng-mouseup="updateSamples(data)">
+      		<md-slider flex min="0" max="16000"  ng-model="numSamples" aria-label="red" id="blue-slider" ng-mouseup="updateSamples(data)" class="md-primary">
       		</md-slider> 
 		</div>
 		<div class="col-lg-2 text-center" style="margin-top:-15px">
 		<md-input-container>
-        	<input flex type="number"  ng-model="numSamples" aria-label="red" aria-controls="red-slider">
-      		</md-input-container>
-
-
+        	<input flex type="number"  ng-model="numSamples" aria-label="red" aria-controls="blue-slider" class="md-primary">
+      		</md-input-container> 
 		</div>
 	</div>
-	<div class="row text-center">
-		
-			  <md-button ng-click="acquire()">Acquire</md-button> 
-	
-	</div>
-	
+
 	<div class="row">
 	<div class="col-lg-8 col-lg-offset-2 ng-hide" ng-hide = "plotHide">
 		<md-card>
 		<md-card-title>
 		  <md-card-title-text>
-            <span class="md-headline">{{plotTitle}}</span>
+            <span class="md-headline">Acquired Data</span>
           </md-card-title-text>
         </md-card-title>
 		<md-card-content>
