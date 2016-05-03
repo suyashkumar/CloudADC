@@ -33,6 +33,8 @@
     MOV ADDR,ADC_TSC
     MOV VALUE,0x00000000   //the 24MHz-clock rate is divided by VALUE+1 to yield ADC_CLOCK 
     SBBO VALUE,ADDR,0x4C,4 //important to write all 4 bytes even though only the first 2 count - if this is not done, the change doesnt take effect for some reason  
+
+
 .macro DELAY
     //MOV r10, 1
     DELAY:
@@ -44,7 +46,6 @@
     //Initialize buffer status (0: empty, 1: first buffer is ready, 2: second buffer is ready)
     MOV r2, 0
     SBCO r2, CONST_PRUSHAREDRAM, 0, 4  // Load 0 into first 4 bytes at shared ram mem address.
-
     INITV:
         MOV r5, 0 // Offset (shared ram saving position)
         MOV r6, BUFF_SIZE  // Counts how much of total buffer used 
@@ -73,10 +74,15 @@
     CHBUFFSTATUS2:
         MOV r2, 2
         SBCO r2, CONST_PRUSHAREDRAM, 0, 4 // Write 2 to the first 4 bytes of shared mem
-        QBA INITV
+        //QBA INITV
+        //SUB r10, r10, 1
+        //QBLT INITV, r10, 2
 
+    
+        MOV r2, 3
+        SBCO r2, CONST_PRUSHAREDRAM, 0, 4
     //Send event to host program
-    MOV r31.b0, PRU0_ARM_INTERRUPT+16 
+    MOV r31.b0, PRU0_ARM_INTERRUPT+16
     HALT
 .endm
 

@@ -20,6 +20,7 @@ Based on work done by Youngtae Jo.
 #include <unistd.h>
 #include <string.h>
 #include <time.h>
+#include <signal.h>
 
 // Driver header file
 #include <pruss/prussdrv.h>
@@ -41,6 +42,7 @@ Based on work done by Youngtae Jo.
 ******************************************************************************/
 static int enable_adc();
 static int enable_pru();
+void exitHandler(int val);
 void print_err(char* input);
 //static unsigned int ProcessingADC1(unsigned int value);
 
@@ -55,6 +57,7 @@ static unsigned int *sharedMem_int;
 ******************************************************************************/
 int main (int argc, char* argv[])
 {
+	signal(SIGINT, exitHandler);
 
     unsigned int ret;
     tpruss_intc_initdata pruss_intc_initdata = PRUSS_INTC_INITDATA;
@@ -84,19 +87,19 @@ int main (int argc, char* argv[])
     prussdrv_map_prumem(PRUSS0_SHARED_DATARAM, &sharedMem); // sharedMem points to proper loc now
     sharedMem_int = (unsigned int*) sharedMem; // cast to int*
 	
-	/* Open save file */
-	
-
-
-
-
+	/* Open save file */ 
 
 	/* Executing PRU. */
 	//printf("\tSampling started for %d seconds\n", sampling_period);
     //printf("\tCollecting");
     prussdrv_exec_program (PRU_NUM, "./ADCCollector.bin"); 
 	/* Read ADC */
+//	prussdrv_pru_wait_event (PRU_EVTOUT_0);
+//	printf("Finished");
 	while(1){
+		if (sharedMem_int[OFFSET_SHAREDRAM] == 3){ 
+			break;
+		}
 		while(1){
 			if(sharedMem_int[OFFSET_SHAREDRAM] == 1 && target_buff == 1){ // First buffer is ready
 				for(i=0; i<PRU_SHARED_BUFF_SIZE; i++){
@@ -172,6 +175,15 @@ static int enable_pru()
 		fprintf(ain, "BB-BONE-PRU-01");
 		fclose(ain);
 		return 0;
+}
+void exitHandler(int val){
+	prussdrv_pru_clear_event (PRU_EVTOUT_0, PRU0_ARM_INTERRUPT); 
+    	/* Disable PRU*/
+	prussdrv_pru_disable(PRU_NUM);
+	prussdrv_exit(); 
+	printf("Killed");
+	exit(0);
+
 }
 /*
 print_err()
